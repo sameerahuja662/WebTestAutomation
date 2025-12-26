@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.automation'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // 1. Selenium Java - The core library for browser automation
+    implementation 'org.seleniumhq.selenium:selenium-java:4.27.0'
+
+    // 2. TestNG - The testing framework for assertions and annotations
+    testImplementation 'org.testng:testng:7.10.2'
+
+    // 3. WebDriverManager - Automatically manages chromedriver/geckodriver binaries
+    implementation 'io.github.bonigarcia:webdrivermanager:6.1.0'
+
+    // 4. SLF4J (Optional but recommended) - Silences logging warnings in the console
+    implementation 'org.slf4j:slf4j-simple:2.0.13'
+}
+
+test {
+    useTestNG() {
+    }
+}
