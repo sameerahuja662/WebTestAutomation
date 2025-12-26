@@ -14,14 +14,16 @@ dependencies {
     implementation 'org.seleniumhq.selenium:selenium-java:4.27.0'
 
     // 2. TestNG - The testing framework for assertions and annotations
-    testImplementation 'org.testng:testng:7.10.2'
+    implementation 'org.testng:testng:7.10.2'
 
     // 3. SLF4J (Optional but recommended) - Silences logging warnings in the console
     implementation 'org.slf4j:slf4j-simple:2.0.13'
+
+    // 4. Extent Reports
+    implementation 'com.aventstack:extentreports:5.1.2'
 }
 
 test {
     useTestNG() {
-        suites 'src/test/resources/testng.xml'
     }
 }
