@@ -1,6 +1,9 @@
 package com.automation.tests;
 
 import com.automation.utils.ConfigReader;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -9,10 +12,18 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Date;
 
 public class BaseTest {
     protected WebDriver driver;
+
+    public WebDriver getDriver() {
+        return driver;
+    }
 
     @BeforeMethod
     public void setUp() {
@@ -42,5 +53,21 @@ public class BaseTest {
         if (driver != null) {
             driver.quit();
         }
+    }
+
+    public String getScreenshot(String testName) {
+        String timestamp = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
+        TakesScreenshot ts = (TakesScreenshot) driver;
+        File source = ts.getScreenshotAs(OutputType.FILE);
+
+        // Path where screenshot will be saved
+        String destination = System.getProperty("user.dir") + "/reports/screenshots/" + testName + "_" + timestamp + ".png";
+
+        try {
+            FileUtils.copyFile(source, new File(destination));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return destination; // Return path to attach to Extent Report
     }
 }
