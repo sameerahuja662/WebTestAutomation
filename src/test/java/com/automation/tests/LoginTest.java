@@ -13,6 +13,7 @@ public class LoginTest extends BaseTest {
 //        loginPage.enterUsername("standard_user");
 //        loginPage.enterPassword("secret_sauce");
         loginPage.login("standard_user","secret_sauce");
+        System.out.println("Hi");
 
         // Example Assertion: Verify URL changes after login
         Assert.assertTrue(driver.getCurrentUrl().contains("inventory.html"));
