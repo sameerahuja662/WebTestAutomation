@@ -15,6 +15,7 @@ public class LoginTest extends BaseTest {
         loginPage.login("standard_user","secret_sauce");
         System.out.println("BYE BYE");
 
+        System.out.println("Hi");
         // Example Assertion: Verify URL changes after login
         Assert.assertTrue(driver.getCurrentUrl().contains("inventory.html"));
     }
