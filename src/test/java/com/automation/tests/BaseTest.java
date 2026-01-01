@@ -32,20 +32,19 @@ public class BaseTest {
         if (browser.equalsIgnoreCase("chrome")) {
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--remote-allow-origins=*");
-            // Selenium Manager downloads/uses the correct driver version
-            driver = new ChromeDriver(options);
-            driver.manage().window().maximize();
+            driver = new ChromeDriver(options);// Selenium Manager downloads/uses the correct driver version
 
         } else if (browser.equalsIgnoreCase("firefox")) {
             FirefoxOptions firefoxOptions = new FirefoxOptions();
             driver = new FirefoxDriver(firefoxOptions); // Selenium Manager downloads/uses the correct
-            driver = new FirefoxDriver();
         }
 
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(
-                Integer.parseInt(ConfigReader.getProperty("timeout"))));
-        driver.manage().window().maximize();
-        driver.get(ConfigReader.getProperty("url"));
+        if (driver != null) {
+            driver.manage().window().maximize();
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(
+                    Integer.parseInt(ConfigReader.getProperty("timeout"))));
+            driver.get(ConfigReader.getProperty("url"));
+        }
     }
 
     @AfterMethod
@@ -60,14 +59,39 @@ public class BaseTest {
         TakesScreenshot ts = (TakesScreenshot) driver;
         File source = ts.getScreenshotAs(OutputType.FILE);
 
-        // Path where screenshot will be saved
-        String destination = System.getProperty("user.dir") + "/reports/screenshots/" + testName + "_" + timestamp + ".png";
+        // 1. Define the filename
+        String fileName = testName + "_" + timestamp + ".png";
+
+        // 2. Full path for saving the file physically on the drive
+        String destinationPath = System.getProperty("user.dir") + "/test-output/screenshots/" + fileName;
+
+        try {
+            FileUtils.copyFile(source, new File(destinationPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // 3. RETURN RELATIVE PATH for the Extent Report
+        // Since ExtentReport.html is in /reports/, the image is in screenshots/
+        return "screenshots/" + fileName;
+    }
+
+    public String captureAndAttachScreenshot(String name) {
+        // 1. Create a unique filename with a timestamp
+        String timestamp = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
+        String fileName = name + "_" + timestamp + ".png";
+
+        // 2. Capture the screenshot
+        File source = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        String destination = System.getProperty("user.dir") + "/test-output/screenshots/" + fileName;
 
         try {
             FileUtils.copyFile(source, new File(destination));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Screenshot capture failed: " + e.getMessage());
         }
-        return destination; // Return path to attach to Extent Report
+
+        // 3. Return the relative path for the HTML report
+        return "screenshots/" + fileName;
     }
 }

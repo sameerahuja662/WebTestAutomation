@@ -2,22 +2,40 @@ package com.automation.utils;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.aventstack.extentreports.reporter.configuration.Theme;
 
 public class ExtentManager {
     private static ExtentReports extent;
 
     public static ExtentReports getInstance() {
         if (extent == null) {
-            // Path where the report will be saved
-            ExtentSparkReporter spark = new ExtentSparkReporter("test-output/ExtentReport.html");
-            spark.config().setReportName("Automation Results");
-            spark.config().setDocumentTitle("Test Report");
-
-            extent = new ExtentReports();
-            extent.attachReporter(spark);
-            extent.setSystemInfo("OS", System.getProperty("os.name"));
-            extent.setSystemInfo("Environment", "QA");
+            synchronized (ExtentManager.class) {
+                if (extent == null) {
+                    extent = createInstance();
+                }
+            }
         }
+        return extent;
+    }
+
+    private static ExtentReports createInstance() {
+        // Define report path
+        String path = System.getProperty("user.dir") + "/test-output/reports/ExtentReport.html";
+        ExtentSparkReporter sparkReporter = new ExtentSparkReporter(path);
+
+        // Configure Report Look & Feel
+        sparkReporter.config().setTheme(Theme.STANDARD);
+        sparkReporter.config().setDocumentTitle("Automation Test Report");
+        sparkReporter.config().setReportName("Regression Results");
+        sparkReporter.config().setEncoding("utf-8");
+
+        extent = new ExtentReports();
+        extent.attachReporter(sparkReporter);
+
+        // Add System Info
+        extent.setSystemInfo("OS", System.getProperty("os.name"));
+        extent.setSystemInfo("Java Version", System.getProperty("java.version"));
+
         return extent;
     }
 }
