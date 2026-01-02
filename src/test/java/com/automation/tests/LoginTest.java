@@ -21,5 +21,4 @@ public class LoginTest extends BaseTest {
         TestListener.getTest().addScreenCaptureFromPath(path, "Proof: Username entered");
         Assert.assertTrue(driver.getCurrentUrl().contains("inventory.html"));
     }
-
 }
