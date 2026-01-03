@@ -1,6 +1,8 @@
 package com.automation.utils;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
@@ -44,8 +46,11 @@ public class TestListener implements ITestListener {
 
         if (driver != null) {
             // Use the method that returns the path
-            String screenshotPath = ((BaseTest) testClass).getScreenshot(result.getMethod().getMethodName());
-            test.addScreenCaptureFromPath(screenshotPath);
+            //String screenshotPath = ((BaseTest) testClass).getScreenshot(result.getMethod().getMethodName());
+
+            // Capture as Base64 string instead of a file
+            String base64Code = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
+            test.addScreenCaptureFromBase64String(base64Code);
         }
     }
 

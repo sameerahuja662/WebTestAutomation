@@ -4,9 +4,9 @@
         <listener class-name="com.automation.utils.TestListener"/>
     </listeners>
 
-    <test name="LoginTest">
+    <test name="ShopCart Login Test">
         <classes>
-            <class name="com.automation.tests.LoginTest"/>
+            <class name="com.automation.tests.ShoppingTest"/>
         </classes>
     </test>
 </suite>

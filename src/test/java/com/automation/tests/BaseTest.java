@@ -11,6 +11,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
 
+@Listeners(com.automation.utils.TestListener.class)
 public class BaseTest {
     protected WebDriver driver;
 
@@ -32,6 +34,7 @@ public class BaseTest {
         if (browser.equalsIgnoreCase("chrome")) {
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--remote-allow-origins=*");
+            options.addArguments("--incognito");
             driver = new ChromeDriver(options);// Selenium Manager downloads/uses the correct driver version
 
         } else if (browser.equalsIgnoreCase("firefox")) {
@@ -73,25 +76,6 @@ public class BaseTest {
 
         // 3. RETURN RELATIVE PATH for the Extent Report
         // Since ExtentReport.html is in /reports/, the image is in screenshots/
-        return "screenshots/" + fileName;
-    }
-
-    public String captureAndAttachScreenshot(String name) {
-        // 1. Create a unique filename with a timestamp
-        String timestamp = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
-        String fileName = name + "_" + timestamp + ".png";
-
-        // 2. Capture the screenshot
-        File source = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        String destination = System.getProperty("user.dir") + "/test-output/screenshots/" + fileName;
-
-        try {
-            FileUtils.copyFile(source, new File(destination));
-        } catch (IOException e) {
-            System.out.println("Screenshot capture failed: " + e.getMessage());
-        }
-
-        // 3. Return the relative path for the HTML report
         return "screenshots/" + fileName;
     }
 }
