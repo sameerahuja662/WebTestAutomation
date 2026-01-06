@@ -45,9 +45,6 @@ public class TestListener implements ITestListener {
         WebDriver driver = ((BaseTest) testClass).getDriver();
 
         if (driver != null) {
-            // Use the method that returns the path
-            //String screenshotPath = ((BaseTest) testClass).getScreenshot(result.getMethod().getMethodName());
-
             // Capture as Base64 string instead of a file
             String base64Code = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
             test.addScreenCaptureFromBase64String(base64Code);

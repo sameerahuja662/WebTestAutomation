@@ -28,6 +28,7 @@ public class ExtentManager {
         sparkReporter.config().setDocumentTitle("Automation Test Report");
         sparkReporter.config().setReportName("Regression Results");
         sparkReporter.config().setEncoding("utf-8");
+        sparkReporter.config().thumbnailForBase64(true);
 
         extent = new ExtentReports();
         extent.attachReporter(sparkReporter);
